@@ -16,24 +16,35 @@ const theme = createTheme({
   },
 });
 
+let cancelAxios = null;
 function App() {
+  console.log("Rendering component mounting");
   const [temp, setTemp] = useState(null);
   useEffect(() => {
     axios
       .get(
-        "https://api.openweathermap.org/data/2.5/weather?lat=36.7538&lon=3.0476&appid=0a3f1d989b84e640ece59f66388229b3"
+        "https://api.openweathermap.org/data/2.5/weather?lat=36.7538&lon=3.0476&appid=0a3f1d989b84e640ece59f66388229b3",
+        {
+          cancelToken: new axios.CancelToken((c) => {
+            cancelAxios = c;
+          }),
+        }
       )
       .then((response) => {
         // handle success
         const responceTemp = Math.round(response.data.main.temp - 273.15);
         setTemp(responceTemp);
-        console.log(response.data);
+        console.log(responceTemp);
       })
       .catch(function (error) {
         // handle error
         console.log(error);
-      }, []);
-  });
+      });
+    return () => {
+      console.log("canceling");
+      cancelAxios();
+    };
+  }, []);
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
@@ -78,11 +89,11 @@ function App() {
                       fontWeight: "600",
                     }}
                   >
-                    الرياض
+                    الجزائر
                   </Typography>
 
                   <Typography variant="h5" style={{ marginRight: "20px" }}>
-                    الإثنين ١٠-١٠-٢٠٤٠
+                    الخميس 24-07-2025
                   </Typography>
                 </div>
                 {/* == CITY & TIME == */}
