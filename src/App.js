@@ -10,6 +10,9 @@ import CloudIcon from "@mui/icons-material/Cloud";
 import Button from "@mui/material/Button";
 // External laibrairies
 import axios from "axios";
+import moment from "moment";
+import "moment/min/locales";
+moment.locale("ar-dz");
 const theme = createTheme({
   typography: {
     fontFamily: ["IBM"],
@@ -19,6 +22,7 @@ const theme = createTheme({
 let cancelAxios = null;
 function App() {
   console.log("Rendering component mounting");
+  const [dateAndTime, setDateAndTime] = useState("");
   const [temp, setTemp] = useState({
     number: null,
     description: "",
@@ -27,6 +31,7 @@ function App() {
     icon: null,
   });
   useEffect(() => {
+    setDateAndTime(moment().format("MMMM Do YYYY, h:mm:ss a"));
     axios
       .get(
         "https://api.openweathermap.org/data/2.5/weather?lat=36.7538&lon=3.0476&appid=0a3f1d989b84e640ece59f66388229b3",
@@ -113,7 +118,8 @@ function App() {
                   </Typography>
 
                   <Typography variant="h5" style={{ marginRight: "20px" }}>
-                    الخميس 24-07-2025
+                    {/* الخميس 24-07-2025 */}
+                    {dateAndTime}
                   </Typography>
                 </div>
                 {/* == CITY & TIME == */}
@@ -170,7 +176,6 @@ function App() {
                   />
                 </div>
                 {/*= CONTAINER OF DEGREE + CLOUD ICON ==*/}
-                {/* {icon} */}
               </div>
               {/* == CONTENT == */}
             </div>
