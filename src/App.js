@@ -89,6 +89,7 @@ function App() {
       cancelAxios();
     };
   }, []);
+  const direction = locale == "ar" ? "rtl" : "ltr";
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
@@ -105,7 +106,7 @@ function App() {
           >
             {/* CARD */}
             <div
-              dir="rtl"
+              dir={direction}
               style={{
                 width: "100%",
                 background: "rgb(28 52 91 / 36%)",
@@ -124,7 +125,7 @@ function App() {
                     alignItems: "end",
                     justifyContent: "start",
                   }}
-                  dir="rtl"
+                  dir={direction}
                 >
                   <Typography
                     variant="h2"
@@ -206,7 +207,7 @@ function App() {
 
             {/* TRANSLATION CONTAINER */}
             <div
-              dir="rtl"
+              dir={direction}
               style={{
                 width: "100%",
                 display: "flex",
