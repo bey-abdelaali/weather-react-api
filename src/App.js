@@ -9,10 +9,12 @@ import Typography from "@mui/material/Typography";
 import CloudIcon from "@mui/icons-material/Cloud";
 import Button from "@mui/material/Button";
 // External laibrairies
+import { useTranslation } from "react-i18next";
 import axios from "axios";
 import moment from "moment";
 import "moment/min/locales";
 moment.locale("ar-dz");
+
 const theme = createTheme({
   typography: {
     fontFamily: ["IBM"],
@@ -21,8 +23,10 @@ const theme = createTheme({
 
 let cancelAxios = null;
 function App() {
+  const { t, i18n } = useTranslation();
   console.log("Rendering component mounting");
   const [dateAndTime, setDateAndTime] = useState("");
+  const [locale, setLocale] = useState("ar");
   const [temp, setTemp] = useState({
     number: null,
     description: "",
@@ -30,6 +34,21 @@ function App() {
     max: null,
     icon: null,
   });
+  function handleLanguageClick() {
+    if (locale == "ar") {
+      moment.locale("en");
+      i18n.changeLanguage("en");
+      setLocale("en");
+    } else {
+      moment.locale("ar-dz");
+      i18n.changeLanguage("ar");
+      setLocale("ar");
+    }
+    setDateAndTime(moment().format("MMMM Do YYYY, h:mm:ss a"));
+  }
+  useEffect(() => {
+    i18n.changeLanguage("ar");
+  }, []);
   useEffect(() => {
     setDateAndTime(moment().format("MMMM Do YYYY, h:mm:ss a"));
     axios
@@ -114,7 +133,7 @@ function App() {
                       fontWeight: "600",
                     }}
                   >
-                    الجزائر
+                    {t("Algiers")}
                   </Typography>
 
                   <Typography variant="h5" style={{ marginRight: "20px" }}>
@@ -151,7 +170,7 @@ function App() {
                     </div>
                     {/*== TEMP ==*/}
 
-                    <Typography variant="h6">{temp.description}</Typography>
+                    <Typography variant="h6">{t(temp.description)}</Typography>
 
                     {/* MIN & MAX */}
                     <div
@@ -161,9 +180,13 @@ function App() {
                         alignItems: "center",
                       }}
                     >
-                      <h5>الصغرى: {temp.min}</h5>
+                      <h5>
+                        {t("Min")}: {temp.min}
+                      </h5>
                       <h5 style={{ margin: "0px 5px" }}>|</h5>
-                      <h5>الكبرى: {temp.max}</h5>
+                      <h5>
+                        {t("Max")}: {temp.max}
+                      </h5>
                     </div>
                   </div>
                   {/*== DEGREE & DESCRIPTION ==*/}
@@ -191,8 +214,12 @@ function App() {
                 marginTop: "20px",
               }}
             >
-              <Button style={{ color: "white" }} variant="text">
-                إنجليزي
+              <Button
+                onClick={handleLanguageClick}
+                style={{ color: "white" }}
+                variant="text"
+              >
+                {locale == "ar" ? "إنجليزي" : "Arabic"}
               </Button>
             </div>
             {/*== TRANSLATION CONTAINER ==*/}
